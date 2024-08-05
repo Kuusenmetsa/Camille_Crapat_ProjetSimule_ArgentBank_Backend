@@ -110,6 +110,148 @@ paths:
           description: Invalid Fields
         '500':
           description: Internal Server Error
+  /paymentMethods:
+    get:
+      security:
+        - Bearer: []
+      tags:
+        - Payment Method Module
+      summary: Payment Method API
+      description: API to get the list of all payment methods
+      parameters:
+        - in: header
+          name: Authorization
+          description: Attach Bearer JWT token
+          required: true
+      responses:
+        '200':
+          description: Payment methods retrieved successully
+          schema:
+            $ref: '#/definitions/PaymentMethods'
+        '400':
+          description: Invalid Fields
+        '500':
+          description: Internal Server Error
+  /categories:
+    get:
+      security:
+        - Bearer: []
+      tags:
+        - Categories Module
+      summary: Categories API
+      description: API to get all the categories
+      parameters:
+        - in: header
+          name: Authorization
+          description: Attach Bearer JWT token
+          required: true
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Categories retrieved successfully
+          schema:
+            $ref: '#/definitions/Categories'
+        '400':
+          description: Invalid Fields
+        '500':
+          description: Internal Server Error
+  /transactions/{idAccount}:
+    get:
+      security:
+        - Bearer: []
+      tags:
+        - Transactions Module
+      summary: Transactions API
+      description: API for fetching a transactions by account
+      parameters:
+        - in: header
+          name: Authorization
+          description: Attach Bearer JWT token
+          required: true
+        - in: path
+          name: idAccount
+          description: Account id
+          required: true
+      responses:
+        '200':
+          description: Transactions retrieved successully
+          schema:
+            $ref: '#/definitions/Transactions'
+        '400':
+          description: Invalid Fields
+        '404':
+          description: Account not found
+        '500':
+          description: Internal Server Error
+  /transactions/{idTransaction}:
+    get:
+      security:
+        - Bearer: []
+      tags:
+        - Transactions Module
+      summary: Transactions API
+      description: API to get data for a specific transaction
+      parameters:
+        - in: header
+          name: Authorization
+          description: Attach Bearer JWT token
+          required: true
+        - in: path
+          name: idTransaction
+          description: Transaction id
+          required: true
+      responses:
+        '200':
+          description: Transaction data retrieved successully
+          schema:
+            $ref: '#/definitions/Transaction'
+        '400':
+          description: Invalid Fields
+        '404':
+          description: Transaction not found
+        '500':
+          description: Internal Server Error
+    put:
+      security:
+        - Bearer: []
+      tags:
+        - Transactions Module
+      summary: Transactions API
+      description: API to change the category or comment of a transaction
+      parameters:
+        - in: header
+          name: Authorization
+          description: Attach Bearer JWT token
+          required: true
+        - in: path
+          name: idTransaction
+          description: Transaction id
+          required: true
+        - in: body
+          name: body
+          description: body
+          required: true
+          schema:
+            type: object
+            properties:
+              idCategory:
+                type: string
+              comment:
+                type: string
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Category or comment changed successfully
+          schema:
+            $ref: '#/definitions/PutTransaction'
+        '400':
+          description: Invalid Fields
+        '404':
+          description: Transaction not found
+        '500':
+          description: Internal Server Error
 securityDefinitions:
   Bearer:
     type: apiKey
@@ -164,3 +306,113 @@ definitions:
         type: string
       lastName:
         type: string
+  PaymentMethods:
+    type: object
+    properties:
+      status:
+        type: integer
+      message:
+        type: string
+      body:
+        type: array
+        items:
+          type: object
+          properties:
+            idPaymentMethod:
+              type: string
+            namePaymentMethod:
+              type: string
+  Categories:
+    type: object
+    properties:
+      status:
+        type: integer
+      message:
+        type: string
+      body:
+        type: array
+        items:
+          type: object
+          properties:
+            idCategory:
+              type: string
+            nameCategory:
+              type: string
+  Transactions:
+    type: object
+    properties:
+      status:
+        type: integer
+      message:
+        type: string
+      body:
+        type: array
+        items:
+          type: object
+          properties:
+            idTransaction:
+              type: string
+            date:
+              type: string
+            description:
+              type: string
+            amount:
+              type: number
+            typeTransaction:
+              type: object
+              properties:
+                id:
+                  type: string
+            category:
+              type: object
+              properties:
+                id:
+                  type: string
+            comment:
+              type: string
+  Transaction:
+    type: object
+    properties:
+      status:
+        type: integer
+      message:
+        type: string
+      body:
+        type: object
+        properties:
+          idTransaction:
+            type: string
+          date:
+            type: string
+          description:
+            type: string
+          amount:
+            type: number
+          typeTransaction:
+            type: object
+            properties:
+              id:
+                type: string
+          category:
+            type: object
+            properties:
+              id:
+                type: string
+          comment:
+            type: string
+  PutTransaction:
+    type: object
+    properties:
+      status:
+        type: integer
+      message:
+        type: string
+      body:
+        type: object
+        properties:
+          idTransaction:
+            type: string
+          idCategory:
+            type: string
+          comment:
+            type: string
