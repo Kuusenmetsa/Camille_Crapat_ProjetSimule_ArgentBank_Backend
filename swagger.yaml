@@ -156,7 +156,7 @@ paths:
           description: Invalid Fields
         '500':
           description: Internal Server Error
-  /transactions/{idAccount}:
+  /transactions/account/{idAccount}:
     get:
       security:
         - Bearer: []
